@@ -22,16 +22,38 @@ function dayInfo(feelsLike, humidity, wind, precipitation){
     precipitationClass[0].textContent = `${precipitation}`
 }
 
-function daily( day, icon, max, min){
-
+function daily(dailyData){
+    const dailyClass = document.getElementsByClassName("daily")
+    dailyData.forEach(day => {
+        const card = document.createElement("div")
+        const name  = document.createElement("h3")
+        const temp = document.createElement("p")
+        name.textContent = day.day
+        temp.textContent = day.temp
+        card.append(name,temp)
+        dailyClass.appendChild(card)
+    })
 }
 
-function hourly(time, temp){
+function hourly(hourlyData){
+    const hourlyClass = document.getElementsByClassName("right")
+    hourlyData.forEach(hour =>{
+        const item = document.createElement("div")
+        const time = document.createElement("p")
+        const temp2 = document.createElement("p")
+        time.textContent = hour.hour
+        time.textContent = hour.temp
+        item.append(temp,time)
+        hourlyClass.appendChild(item)
 
+    })
 }
 
 function principal(cityWeather){
     banner(cityWeather.city,cityWeather.country,cityWeather.date)
+    dayInfo(feelsLike.city,humidity.city,wind.city,precipitation.city)
+    daily(dailyData)
+    hourly(hourlyData)
 }
 
 principal(cityWeather)
