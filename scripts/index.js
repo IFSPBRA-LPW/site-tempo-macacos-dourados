@@ -1,67 +1,102 @@
 import { cityWeather } from "./data.js"
 
-function banner(city, country, date, temperature){
-    const cityClass = document.getElementsByClassName("city")
-    cityClass[0].textContent = `${city}, ${country}`
-    const dateClass = document.getElementsByClassName("day")
-    dateClass[0].textContent = `${date}`
-    const iconClass = document.createElement("i")
-    /*iconClass.classList.add(cityWeather.icon, "icon")*/
-    console.log(cityWeather.icon.split(" "))
-    const temperatureClass = document.getElementsByClassName("temp")
-    temperatureClass[0].textContent = `${temperature}` + "°"
-    console.log(temperatureClass)
+function renderBannerInfo(data){
+
+    const cityClass = document.getElementsByClassName("city")[0]
+    const dateClass = document.getElementsByClassName("day")[0]
+    const tempClass = document.getElementsByClassName("temp")[0]
+
+    cityClass.textContent = `${data.city}, ${data.country}`
+    dateClass.textContent = data.date
+    tempClass.textContent = `${data.temperature}°`
+
 }
 
-function dayInfo(feelsLike, humidity, wind, precipitation){
-    const feelsLikeClass = document.getElementsByClassName("fl")
-    const humidityClass = document.getElementsByClassName("hu")
-    const windClass = document.getElementsByClassName("wd")
-    const precipitationClass = document.getElementsByClassName("pc")
-    feelsLikeClass[0].textContent = `${feelsLike}` + "°"
-    humidityClass[0].textContent = `${humidity}` + "%"
-    windClass[0].textContent = `${wind}` + " km/h"
-    precipitationClass[0].textContent = `${precipitation}` + "mm"
+function renderDayInfo(data){
+
+    const feelsLikeClass = document.getElementsByClassName("fl")[0]
+    const humidityClass = document.getElementsByClassName("hu")[0]
+    const windClass = document.getElementsByClassName("wd")[0]
+    const precipitationClass = document.getElementsByClassName("pc")[0]
+
+    feelsLikeClass.textContent = `${data.feelsLike}°`
+    humidityClass.textContent = `${data.humidity}%`
+    windClass.textContent = `${data.wind} km/h`
+    precipitationClass.textContent = `${data.precipitation} mm`
+
 }
 
-function daily(dailyData){
-    const dailyClass = document.getElementsByClassName("daily")
-    console.log(dailyClass)
+function renderDaily(dailyData){
+
+    const dailyContainer = document.getElementsByClassName("daily")[0]
+
+    dailyContainer.innerHTML = ""
+
     dailyData.forEach(day => {
+
         const card = document.createElement("div")
+        card.classList.add("daily-card")
+
         const dia = document.createElement("p")
-        const icon = document.createElement("i")
-        const tempMin = document.createElement("p")
-        const tempMax = document.createElement("p")
         dia.textContent = day.day
-        tempMin.textContent = day.min + "°"
-        tempMax.textContent = day.max + "°"
-        card.append(icon, tempMin, tempMax, dia)
-        dailyClass[0].appendChild(card)
+
+        const icon = document.createElement("span")
+        icon.textContent = day.icon
+
+        const temp = document.createElement("p")
+        temp.textContent = `${day.max}° / ${day.min}°`
+
+        card.append(dia, icon, temp)
+
+        dailyContainer.appendChild(card)
+
     })
+
 }
 
-function hourly(hourlyData){
+function renderHourly(hourlyData){
 
-    const hourlyClass = document.getElementsByClassName("right")
-    hourlyData.forEach(hour =>{
+    const hourlyContainer = document.getElementsByClassName("right")[0]
+
+    hourlyData.forEach(hour => {
+
         const item = document.createElement("div")
-        const time = document.createElement("p")
-        const temp2 = document.createElement("p")
+        item.classList.add("hour-item")
+
+        const left = document.createElement("div")
+        left.classList.add("left-hourly")
+
+        const icon = document.createElement("span")
+        icon.textContent = "⏰"
+
+        const time = document.createElement("span")
         time.textContent = hour.time
-        temp2.textContent = hour.temp + "°"
-        item.append(temp2,time)
-        hourlyClass[0].appendChild(item)
+
+        left.append(icon, time)
+
+        const right = document.createElement("div")
+        right.classList.add("right-hourly")
+
+        const temp = document.createElement("span")
+        temp.textContent = `${hour.temp}°`
+
+        right.appendChild(temp)
+
+        item.append(left, right)
+
+        hourlyContainer.appendChild(item)
 
     })
+
 }
 
-function principal(cityWeather){
+function init(data){
 
-    banner(cityWeather.city,cityWeather.country,cityWeather.date, cityWeather.temperature)
-    dayInfo(cityWeather.feelsLike, cityWeather.humidity, cityWeather.wind, cityWeather.precipitation)
-    daily(cityWeather.daily)
-    hourly(cityWeather.hourly)
+    renderBannerInfo(data)
+    renderDayInfo(data)
+    renderDaily(data.daily)
+    renderHourly(data.hourly)
+
 }
 
-principal(cityWeather)
+init(cityWeather)
