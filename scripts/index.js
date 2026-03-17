@@ -2,13 +2,16 @@ import { cityWeather } from "./data.js"
 
 function renderBannerInfo(data){
 
-    const cityClass = document.getElementsByClassName("city")[0]
-    const dateClass = document.getElementsByClassName("day")[0]
-    const tempClass = document.getElementsByClassName("temp")[0]
+    const cityClass = document.getElementsByClassName("city")
+    const dateClass = document.getElementsByClassName("day")
+    const tempClass = document.getElementsByClassName("temp")
+    const iconClass = document.querySelector(".icone")
 
     cityClass.textContent = `${data.city}, ${data.country}`
     dateClass.textContent = data.date
     tempClass.textContent = `${data.temperature}°`
+    iconClass.classList.add(...cityWeather['icon'])
+    console.log(iconClass.classList)
 
 }
 
@@ -39,9 +42,10 @@ function renderDaily(dailyData){
 
         const dia = document.createElement("p")
         dia.textContent = day.day
-
-        const icon = document.createElement("span")
-        icon.textContent = day.icon
+        const icon = document.createElement("i")
+        if (day['icon']){
+            icon.classList.add(...day['icon'])
+        }
 
         const temp = document.createElement("p")
         temp.textContent = `${day.max}° / ${day.min}°`
