@@ -1,14 +1,18 @@
-export {API_KEY} from './config.js'
+import {API_KEY} from './config.js'
 async function fetchWeather(city){
+    const endereco = `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${city}&days=7&lang=pt` 
+    console.log(endereco)
     const response = await fetch(
-        ``,
+        endereco
     );
     if(!response.ok){
-        throw new Error("Erro ao buscar dados da API")
+            throw new Error("Erro ao buscar dados da API")
     }
-    return response.json()
-}
+    const nome = await response.json()
+    console.log(nome)
+    return nome
 
+}
 export const objectCity = {
     city:"",
     country:"",
@@ -18,34 +22,46 @@ export const objectCity = {
 }
 
 
-export const cityWeather = { 
-city: "Paris", 
-country: "Germany", 
-date: "Tuesday, Aug 5, 2025", 
-icon: ["fa-regular", "fa-sun"], 
-temperature: 20, 
-feelsLike: 18, 
-humidity: 46, 
-wind: 14, 
-precipitation: 0, 
-daily: [ 
-{ day: "Tue", icon: ["fa-regular", "fa-sun"], max: 20, min: 14 }, 
-{ day: "Wed", icon: ["fa-solid","fa-temperature-high"], max: 21, min: 15 }, 
-{ day: "Thu", icon: ["fa-solid","fa-cloud-bolt"], max: 24, min: 14 }, 
-{ day: "Fri", icon: ["fa-solid","fa-sun"], max: 25, min: 13 }, 
-{ day: "Sat", icon: ["fa-solid","fa-cloud-sun"], max: 21, min: 15 }, 
-{ day: "Sun", icon: ["fa-regular","fa-cloud"], max: 25, min: 16 }, 
-{ day: "Mon", icon: ["fa-solid","fa-droplet"], max: 24, min: 15 }, 
-], 
-hourly: [ 
-{ time: "3 PM", temp: 20 }, 
-{ time: "4 PM", temp: 20 }, 
-{ time: "5 PM", temp: 20 }, 
-{ time: "6 PM", temp: 19 }, 
-{ time: "7 PM", temp: 18 }, 
-{ time: "8 PM", temp: 18 }, 
-{ time: "9 PM", temp: 17 }, 
-{ time: "10 PM", temp: 17 }, 
-], 
+
+export async function criarTudo(){
+    try{
+        const objeto =  await fetchWeather()
+    }catch (error){
+        console.error("Erro ao processar cidades")
+    }
+    const diario = objeto.forecast.forecastday
+    const horario = objeto.forecast.forecastday[0].hour
+    const cityWeather = { 
+    city: objeto.location.name,
+    country: objeto.location.country, 
+    date: objeto.location.localtime,
+    icon: objeto.current.icon, 
+    temperature:objeto.current.temp_c, 
+    feelsLike:objeto.current.feelslike_c, 
+    humidity:objeto.current.humidity, 
+    wind: objeto.current.wind_kph,
+    precipitation: objeto.current.precip_mm, 
+    daily: [],
+    hourly:[],
+}
+for(let i=0;i<diarios.length;i++){
+    let dia = {day: }
+}
+// hourly: [ 
+// { time: "3 PM", temp: 20 }, 
+// { time: "4 PM", temp: 20 }, 
+// { time: "5 PM", temp: 20 }, 
+// { time: "6 PM", temp: 19 }, 
+// { time: "7 PM", temp: 18 }, 
+// { time: "8 PM", temp: 18 }, 
+// { time: "9 PM", temp: 17 }, 
+// { time: "10 PM", temp: 17 }, 
+// ], 
 };
+console.log(cityWeather)
+function dayWeek(dia){
+    let dias=['dom','seg','ter','qua','qui','sex','sab']
+    const data = new Date(dia + "T12:00:00")
+    return dias[data.getDay()]
+}
 

@@ -1,2 +1,2 @@
-export const API_KEY = "SUA_CHAVE_AQUI";
+export const API_KEY = "";
 /*Crie a sua chave por aqui */
