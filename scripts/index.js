@@ -1,18 +1,14 @@
-import { cityWeather } from "./data.js"
+import {criarTudo} from "./data.js"
+const hourlyContainer = document.getElementsByClassName("right")[0]
 
 function renderBannerInfo(data){
 
-    const cityClass = document.getElementsByClassName("city")
-    const dateClass = document.getElementsByClassName("day")
-    const tempClass = document.getElementsByClassName("temp")
-    const iconClass = document.querySelector(".icone")
-
+    const cityClass = document.getElementsByClassName("city")[0]
+    const dateClass = document.getElementsByClassName("day")[0]
+    const tempClass = document.getElementsByClassName("temp")[0]
     cityClass.textContent = `${data.city}, ${data.country}`
     dateClass.textContent = data.date
     tempClass.textContent = `${data.temperature}°`
-    iconClass.classList.add(...cityWeather['icon'])
-    console.log(iconClass.classList)
-
 }
 
 function renderDayInfo(data){
@@ -33,7 +29,7 @@ function renderDaily(dailyData){
 
     const dailyContainer = document.getElementsByClassName("daily")[0]
 
-    dailyContainer.innerHTML = ""
+    hourlyContainer.innerHTML = ""
 
     dailyData.forEach(day => {
 
@@ -60,7 +56,6 @@ function renderDaily(dailyData){
 
 function renderHourly(hourlyData){
 
-    const hourlyContainer = document.getElementsByClassName("right")[0]
 
     hourlyData.forEach(hour => {
 
@@ -102,5 +97,4 @@ function init(data){
     renderHourly(data.hourly)
 
 }
-
-init(cityWeather)
+init(await criarTudo('Rio de Janeiro'))

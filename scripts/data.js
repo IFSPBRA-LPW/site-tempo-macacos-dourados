@@ -1,7 +1,6 @@
 import {API_KEY} from './config.js'
 async function fetchWeather(city){
     const endereco = `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${city}&days=7&lang=pt` 
-    console.log(endereco)
     const response = await fetch(
         endereco
     );
@@ -9,33 +8,19 @@ async function fetchWeather(city){
             throw new Error("Erro ao buscar dados da API")
     }
     const nome = await response.json()
-    console.log(nome)
     return nome
-
-}
-export const objectCity = {
-    city:"",
-    country:"",
-    date:"",
-    icon:""
-
 }
 
-
-
-export async function criarTudo(){
+export async function criarTudo(city){
     try{
-        const objeto =  await fetchWeather()
-    }catch (error){
-        console.error("Erro ao processar cidades")
-    }
-    const diario = objeto.forecast.forecastday
+        const objeto =  await fetchWeather(city)
+        const diario = objeto.forecast.forecastday
     const horario = objeto.forecast.forecastday[0].hour
     const cityWeather = { 
     city: objeto.location.name,
     country: objeto.location.country, 
     date: objeto.location.localtime,
-    icon: objeto.current.icon, 
+    icon: objeto.current.condition.icon, 
     temperature:objeto.current.temp_c, 
     feelsLike:objeto.current.feelslike_c, 
     humidity:objeto.current.humidity, 
@@ -44,21 +29,21 @@ export async function criarTudo(){
     daily: [],
     hourly:[],
 }
-for(let i=0;i<diarios.length;i++){
-    let dia = {day: }
+for(let i=0;i<diario.length;i++){
+    let dia = {day: dayWeek(diario[i].date), icon:diario[i].day.condition.icon, max: diario[i].day.maxtemp_c, min:diario[i].day.mintemp_c}
+    cityWeather['daily'].push(dia)
 }
-// hourly: [ 
-// { time: "3 PM", temp: 20 }, 
-// { time: "4 PM", temp: 20 }, 
-// { time: "5 PM", temp: 20 }, 
-// { time: "6 PM", temp: 19 }, 
-// { time: "7 PM", temp: 18 }, 
-// { time: "8 PM", temp: 18 }, 
-// { time: "9 PM", temp: 17 }, 
-// { time: "10 PM", temp: 17 }, 
-// ], 
+for(let i = 15;i<22;i++){
+    let hora = {time:[horario[i].condition.icon,`${i}hr`], temp:`${horario[i].feelslike_c}°C`}
+    cityWeather.hourly.push(hora)
+}
+return cityWeather
+    }catch (error){
+        console.error("Erro ao processar cidades")
+    }
+    
 };
-console.log(cityWeather)
+
 function dayWeek(dia){
     let dias=['dom','seg','ter','qua','qui','sex','sab']
     const data = new Date(dia + "T12:00:00")
