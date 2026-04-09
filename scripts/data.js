@@ -13,8 +13,8 @@ async function fetchWeather(city){
 
 export async function criarTudo(city){
     try{
-        const objeto =  await fetchWeather(city)
-        const diario = objeto.forecast.forecastday
+    const objeto =  await fetchWeather(city)
+    const diario = objeto.forecast.forecastday
     const horario = objeto.forecast.forecastday[0].hour
     const cityWeather = { 
     city: objeto.location.name,
@@ -27,14 +27,18 @@ export async function criarTudo(city){
     wind: objeto.current.wind_kph,
     precipitation: objeto.current.precip_mm, 
     daily: [],
-    hourly:[],
+    hourly:[]
 }
 for(let i=0;i<diario.length;i++){
     let dia = {day: dayWeek(diario[i].date), icon:diario[i].day.condition.icon, max: diario[i].day.maxtemp_c, min:diario[i].day.mintemp_c}
     cityWeather['daily'].push(dia)
 }
 for(let i = 15;i<22;i++){
-    let hora = {time:[horario[i].condition.icon,`${i}hr`], temp:`${horario[i].feelslike_c}°C`}
+    let hora = {
+    time: `${i}h`,
+    icon: `https:${horario[i].condition.icon}`,
+    temp: horario[i].feelslike_c
+    }
     cityWeather.hourly.push(hora)
 }
 return cityWeather
